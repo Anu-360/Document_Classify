@@ -11,3 +11,8 @@ python-docx
 PyMuPDF
 pinecone
 sentence-transformers
+boto3
+pdfminer
+pandas
+openpyxl
+xlrd

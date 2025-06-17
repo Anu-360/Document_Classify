@@ -56,4 +56,4 @@ def run_mailbox_page():
  
     if st.button("⬅ Back to Home"):
         st.session_state.page = "home"
-        st.experimental_rerun()
+        st.rerun()

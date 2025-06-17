@@ -7,7 +7,7 @@ from utils import process_and_display_file
 pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
  
 UPLOAD_FOLDER = 'uploads/'
-ALLOWED_EXTENSIONS = {'pdf', 'docx', 'jpg', 'jpeg', 'png', 'gif'}
+ALLOWED_EXTENSIONS = {'pdf', 'docx', 'jpg', 'jpeg', 'png', 'gif','xls','xlsx'}
  
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
@@ -28,7 +28,7 @@ def main():
         with col2:
             if st.button("📬 Connect Mailbox"):
                 st.session_state.page = "mailbox"
-                st.experimental_rerun()
+                st.rerun()
  
         st.header("Upload Documents")
         uploaded_files = st.file_uploader("Choose files", type=list(ALLOWED_EXTENSIONS), accept_multiple_files=True)
