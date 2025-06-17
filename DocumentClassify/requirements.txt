@@ -1,0 +1,13 @@
+streamlit
+standard-imghdr
+altair==4.2.2
+pytesseract
+tesseract
+Pillow
+spacy
+transformers
+en-core-web-sm-abd
+python-docx
+PyMuPDF
+pinecone
+sentence-transformers
