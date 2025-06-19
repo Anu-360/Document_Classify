@@ -1,41 +1,44 @@
 import os
-from sentence_transformers import SentenceTransformer
-from pinecone import Pinecone, ServerlessSpec
- 
-# Use your Pinecone API Key
-PINECONE_API_KEY = os.getenv("PINECONE_API_KEY", "pcsk_2hN28V_7qeN16ReybKNgr6qFXKw3rX8sgrJmiQatPNHLnJofxqzZQzbUY5PAd315jmC2ev")
-INDEX_NAME = "gen-index"
-EMBED_DIM = 384  # Match the sentence-transformer output dim
- 
-# Initialize Pinecone
-pc = Pinecone(api_key=PINECONE_API_KEY)
- 
-# Create index if not exists
-if INDEX_NAME not in pc.list_indexes().names():
-    pc.create_index(
-        name=INDEX_NAME,
-        dimension=EMBED_DIM,
-        metric="cosine",
-        spec=ServerlessSpec(cloud="aws", region="us-west-2")
-    )
- 
-# Connect to the index
-index = pc.Index(INDEX_NAME)
- 
-# Load SentenceTransformer model
-model = SentenceTransformer("all-MiniLM-L6-v2")
- 
- 
-def get_embedding(text):
-    return model.encode(text).tolist()
- 
- 
-def add_document_to_pinecone(doc_id, text, metadata):
-    embedding = get_embedding(text)
-    index.upsert([(doc_id, embedding, metadata)])
- 
- 
-def classify_document(text, top_k=3):
-    embedding = get_embedding(text)
-    return index.query(vector=embedding, top_k=top_k, include_metadata=True)
- 
+import google.generativeai as genai
+
+# Load Gemini API Key from environment variable or hardcoded fallback
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyCtlMNvb3XOhcaUjQ8AIbxQfQkdUiHBr3Y")
+
+# Configure Gemini with the key
+genai.configure(api_key=GEMINI_API_KEY)
+
+# Load Gemini model
+model = genai.GenerativeModel("models/gemini-2.5-flash-preview-05-20")
+
+# Classify document using Gemini LLM
+def classify_document(text):
+    prompt = f"""
+You are a document classifier AI. Classify the document text into one of the following categories:
+
+- Resume
+- Invoice
+- Letter
+- Report
+- Legal Document
+- Financial Statement
+- Educational Transcript
+- Others
+
+Respond ONLY in valid JSON format, no markdown, no extra explanation.
+
+Format:
+{{
+  "type": "<document_type>",
+  "confidence": "<confidence score between 0 and 1>",
+  "reason": "<brief reason>"
+}}
+
+Here is the document content:
+{text[:4000]}
+"""
+
+    try:
+        response = model.generate_content(prompt)
+        return response.text.strip()
+    except Exception as e:
+        return f"ERROR::{str(e)}"

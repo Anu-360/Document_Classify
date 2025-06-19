@@ -1,0 +1,20 @@
+[
+    {
+        "filename": "Invoice template.pdf",
+        "type": "Invoice",
+        "status": "Classified \u2192 Routed",
+        "last_updated": "2025-06-19 09:46:45"
+    },
+    {
+        "filename": "cash-budget-template-word (2).docx",
+        "type": "Financial Statement",
+        "status": "Classified \u2192 Routed",
+        "last_updated": "2025-06-19 09:41:23"
+    },
+    {
+        "filename": "Budget Document.pdf",
+        "type": "Financial Statement",
+        "status": "Classified \u2192 Routed",
+        "last_updated": "2025-06-19 09:47:43"
+    }
+]
